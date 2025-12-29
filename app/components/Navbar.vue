@@ -7,6 +7,15 @@
     <el-menu-item index="/posts" class="ml-6">
       <NuxtLink to="/pokemonType/normal" active-class="text-yellow-500 font-bold">Pokemon Type</NuxtLink>
     </el-menu-item>
-    <FavoriteDropdown />
+    <el-badge :value="1" class="item" type="primary">
+      <FavoriteDropdown />
+    </el-badge>
+    
   </el-menu>
 </template>
+
+<style scoped>
+.item {
+  margin-right: 30px;
+}
+</style>

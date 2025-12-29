@@ -16,12 +16,12 @@
       <!-- Heart -->
       <button
         class="absolute top-3 right-3 transition-transform duration-150 hover:scale-110"
-        @click.stop="toggleFavorite(pokemon)"
+        @click.stop="favoritesStore.toggleFavorite(pokemon)"
       >
         <component 
-          :is="isFavorite(pokemon.id) ? HeartSolid : HeartOutline"
+          :is="favoritesStore.isFavorite(pokemon.id) ? HeartSolid : HeartOutline"
           class="w-6 h-6 transition-colors"
-          :class="isFavorite(pokemon.id) ? 'text-red-500' : 'text-gray-400 hover:text-red-400'"
+          :class="favoritesStore.isFavorite(pokemon.id) ? 'text-red-500' : 'text-gray-400 hover:text-red-400'"
         />
       </button>
 
@@ -71,7 +71,7 @@ import { getTypeColor } from "@/utils/typeColors"
 import PokemonDetail from "./PokemonDetail.vue"
 import { HeartIcon as HeartOutline } from "@heroicons/vue/24/outline";
 import { HeartIcon as HeartSolid } from "@heroicons/vue/24/solid";
-import { useFavorites } from "@/composables/useFavorites";
+import { useFavoritesStore } from "~/stores/favorites";
 
 
 const {pokemons, totalPokemons, currentPage, fetchPokemons} = usePokemons()
@@ -79,7 +79,8 @@ const {pokemons, totalPokemons, currentPage, fetchPokemons} = usePokemons()
 const isModalOpen = ref(false)
 const selectedPokemon = ref<any>(null)
 
-const { favorites, toggleFavorite, isFavorite } = useFavorites();
+// const { favorites, toggleFavorite, isFavorite } = useFavorites();
+const favoritesStore = useFavoritesStore();
 
 const openModal = async (id: number) => {
   const pokemon = pokemons.value.find((p) => p.id === id)
@@ -91,8 +92,10 @@ const openModal = async (id: number) => {
 
 onMounted(async () => {
   fetchPokemons()
-  const saved = localStorage.getItem("favoritePokemons");
-  if (saved) favorites.value = JSON.parse(saved);
+  // const saved = localStorage.getItem("favoritePokemons");
+  // if (saved) favorites.value = JSON.parse(saved);
+  favoritesStore.loadFavorites()
+
 })
 
 const changePage = (page: number) => {
